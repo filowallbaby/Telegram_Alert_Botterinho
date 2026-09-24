@@ -8,7 +8,7 @@ What you need:
 - a Cloudflare account (the free Workers plan is enough)
 - a Telegram group where you're an admin
 
-All commands below work the same in PowerShell, Terminal or any other shell.
+All commands below work the same in Command Prompt, PowerShell, Terminal or any other shell. On Windows, if PowerShell refuses to run `npm` with an error about running scripts being disabled, use Command Prompt instead, or run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` once.
 
 ## 1. Create the bot
 
@@ -29,10 +29,10 @@ npm run check
 
 ```sh
 npx wrangler login
-npx wrangler d1 create road-alert-db
+npx wrangler d1 create road-alert-db --binding DB
 ```
 
-The first command opens your browser so you can log in to Cloudflare. The second creates the database and prints a `database_id`, which looks like a UUID. Copy it, you'll need it in step 5.
+The first command opens your browser so you can log in to Cloudflare. The second creates the database and, thanks to `--binding DB`, writes its `database_id` straight into `wrangler.jsonc`. You can add `--location weur` (or `enam`, `apac` and so on) to keep the database close to your group.
 
 If you want to stay at zero cost, check that your account is on Workers Free and don't enable any paid add-ons.
 
@@ -44,7 +44,7 @@ npm run telegram:discover
 
 The script asks for the bot token (typing is hidden) and saves it in `.dev.vars` along with a random webhook secret. Then it asks you to send `/id@your_bot_username` in the group. Do that, press Enter, and the script prints the ID of every group it saw. Supergroup IDs are negative and usually start with `-100`.
 
-The bot won't answer `/id`. The script only reads the message to get the chat ID.
+The bot won't answer `/id`. The script only reads the message to get the chat ID. If it lists the same group twice, use the ID that starts with `-100`: Telegram changes the ID when a group is upgraded to a supergroup.
 
 If the bot already has a webhook (because something else uses it), the script stops instead of removing it. Create a new bot in that case.
 
@@ -54,7 +54,7 @@ If the bot already has a webhook (because something else uses it), the script st
 npm run configure
 ```
 
-It asks for the `database_id`, the group ID, the map title, where the map should start, the time zone and the topic ID. It checks that the bot can see the group and is an admin, then saves everything in `wrangler.jsonc`. The token is not written there.
+It asks for the `database_id` (already filled in from step 3, just press Enter), the group ID, the map title, where the map should start, the time zone and the topic ID. It checks that the bot can see the group and is an admin, then saves everything in `wrangler.jsonc`. The token is not written there.
 
 The starting position is just the initial view. As soon as there are reports, the map zooms to fit them. It doesn't limit where reports can come from.
 
@@ -66,7 +66,7 @@ npm run deploy
 npm run secrets:upload
 ```
 
-This creates the tables in the remote database, deploys the Worker and the map, and uploads `BOT_TOKEN` and `WEBHOOK_SECRET` as Worker secrets. The deploy prints your Worker address, something like:
+This creates the tables in the remote database, deploys the Worker and the map, and uploads `BOT_TOKEN` and `WEBHOOK_SECRET` as Worker secrets. If it's your first Worker, the deploy asks you to pick a `workers.dev` subdomain. Then it prints your Worker address, something like:
 
 ```text
 https://road-alert-bot.your-subdomain.workers.dev

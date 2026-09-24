@@ -13,7 +13,8 @@ try {
   const file = await config();
   const name = await ask('Cloudflare Worker name', file.name);
   if (!/^[a-z0-9][a-z0-9-]{1,61}[a-z0-9]$/.test(name)) throw new Error('Worker names are 3-63 characters: lowercase letters, digits and dashes.');
-  const databaseId = await ask('database_id printed by wrangler d1 create');
+  const currentId = file.d1_databases[0].database_id;
+  const databaseId = await ask('database_id printed by wrangler d1 create', /^0{8}-/.test(currentId) ? '' : currentId);
   if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(databaseId)) throw new Error('database_id must be a UUID.');
   const input = await ask('Group ID (negative number, run npm run telegram:discover to find it)');
   const group = Number(input);
