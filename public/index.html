@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#153f3a">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Road alerts</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">R</span><div><p class="eyebrow">GROUP MAP</p><h1 id="title">Road alerts</h1></div></div>
+    <span class="private-tag">Members only</span>
+  </header>
+  <main>
+    <section id="access" class="access-card" aria-live="polite">
+      <p class="eyebrow">ROAD REPORTS</p><h2>Reports from the group, on a map.</h2>
+      <p id="access-text">Checking your Telegram login...</p>
+      <p class="muted">Open this page with the Map button in the bot. The data isn't public.</p>
+      <button id="retry-access" type="button" hidden>Try again</button>
+    </section>
+    <div id="application" hidden>
+      <section class="overview" aria-label="Summary">
+        <div><p class="eyebrow">REPORTED BY MEMBERS</p><h2>What's happening on the roads</h2><p id="updated" class="muted" aria-live="polite">Loading...</p></div>
+        <div class="metrics"><div><strong id="count">0</strong><span>reports shown</span></div><div><strong id="confirm-count">0</strong><span>confirmations on these reports</span></div></div>
+      </section>
+      <section class="toolbar" aria-label="Map filters">
+        <div class="segments" role="group" aria-label="Time range">
+          <button type="button" data-mode="active" aria-pressed="true">Active</button>
+          <button type="button" data-mode="24h" aria-pressed="false">Last 24 h</button>
+          <button type="button" data-mode="7d" aria-pressed="false">7 days</button>
+        </div>
+        <label class="filter-label">Category<select id="category"><option value="all">All categories</option></select></label>
+        <button id="refresh" class="secondary" type="button">Refresh</button>
+      </section>
+      <p id="error" class="notice error" role="alert" hidden></p>
+      <p id="map-warning" class="notice" hidden></p>
+      <section class="workspace">
+        <div class="map-panel"><div id="map" aria-label="Map of reports"></div><p class="map-caption">Tap a marker or a report for details. The map never asks for your location.</p></div>
+        <aside class="feed" aria-label="List of reports">
+          <div class="feed-heading"><h3>Reports</h3><span id="period-label">Active</span></div>
+          <div id="events" class="event-list"></div>
+          <p id="empty" class="empty" hidden>No reports match these filters.</p>
+          <button id="more" class="secondary" type="button" hidden>Load more reports</button>
+        </aside>
+      </section>
+      <p id="pagination-note" class="muted"></p>
+      <footer class="footer-note"><strong>Reports come from group members and aren't official.</strong> "Expired" means nobody updated the report in time, not that the road is clear. To confirm or close a report, use its card in the group. Don't use your phone while driving.</footer>
+    </div>
+  </main>
+  <dialog id="detail">
+    <div class="dialog-head"><span class="eyebrow">REPORT DETAILS</span><button id="close-detail" class="secondary" type="button" aria-label="Close details">Close</button></div>
+    <div id="detail-content"></div>
+  </dialog>
+  <noscript>The map needs JavaScript.</noscript>
+</body>
+</html>

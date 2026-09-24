@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "road-alert-bot",
+  "main": "src/index.ts",
+  "compatibility_date": "2025-09-01",
+  "workers_dev": true,
+  "assets": {
+    "directory": "./public", "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/telegram/*", "/health"]
+  },
+  "d1_databases": [{
+    "binding": "DB", "database_name": "road-alert-db",
+    "database_id": "00000000-0000-0000-0000-000000000000",
+    "migrations_dir": "database/migrations"
+  }],
+  "triggers": { "crons": ["*/5 * * * *"] },
+  "observability": { "enabled": false },
+  "vars": {
+    "BOT_USERNAME": "your_bot_username",
+    "ALLOWED_CHAT_ID": "0",
+    "APP_TITLE": "Road alerts",
+    "MAP_CENTER_LAT": "42.5", "MAP_CENTER_LON": "12.5", "MAP_ZOOM": "6",
+    "TIME_ZONE": "Europe/Rome",
+    "GROUP_THREAD_ID": "0",
+    "MAX_REPORTS_PER_HOUR": "10",
+    "COMMUNITY_RESOLVE_VOTES": "2"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "road-alert-bot",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Telegram bot for community road reports, with a members-only map. Runs on Cloudflare Workers and D1.",
+  "engines": { "node": ">=22.16.0" },
+  "scripts": {
+    "dev": "wrangler dev",
+    "typecheck": "tsc --noEmit",
+    "build:test": "tsc -p tsconfig.test.json",
+    "test": "npm run build:test && node --experimental-sqlite --test --test-concurrency=1 tests/*.test.mjs",
+    "check": "npm run typecheck && npm test",
+    "configure": "node scripts/configure.mjs",
+    "telegram:discover": "node scripts/telegram.mjs discover",
+    "telegram:setup": "node scripts/telegram.mjs setup",
+    "telegram:status": "node scripts/telegram.mjs status",
+    "secrets:upload": "node scripts/upload-secrets.mjs",
+    "db:local": "wrangler d1 migrations apply DB --local",
+    "db:remote": "wrangler d1 migrations apply DB --remote",
+    "db:backup": "node scripts/backup.mjs",
+    "deploy": "npm run typecheck && wrangler deploy"
+  },
+  "devDependencies": { "typescript": "5.8.3", "wrangler": "^4.0.0" }
+}

@@ -1,0 +1,4 @@
+# Local secrets. The setup scripts create .dev.vars for you.
+# Never commit the real file or copy these values into public/.
+BOT_TOKEN=123456789:token-from-botfather
+WEBHOOK_SECRET=random-string-generated-by-the-scripts
